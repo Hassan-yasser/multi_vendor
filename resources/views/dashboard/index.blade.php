@@ -1,8 +1,8 @@
 @extends('layout.dashboard')
 
-@section('title', 'لوحة التحكم')
+@section('title', 'Dashboard')
 
-@section('page_title', 'لوحة التحكم')
+@section('page_title', 'Dashboard')
 
 @section('content')
   <!--begin::Row-->
@@ -11,7 +11,7 @@
       <div class="small-box text-bg-primary">
         <div class="inner">
           <h3>150</h3>
-          <p>طلبات جديدة</p>
+          <p>New orders</p>
         </div>
         <svg
           class="small-box-icon"

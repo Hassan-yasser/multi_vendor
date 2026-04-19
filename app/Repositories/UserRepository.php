@@ -8,7 +8,6 @@ use Illuminate\Support\Str;
 
 final class UserRepository implements UserRepositoryContract
 {
-
     public function createUser(string $name, string $email, string $plainPassword): User
     {
         return User::query()->create([

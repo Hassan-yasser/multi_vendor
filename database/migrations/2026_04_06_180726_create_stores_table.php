@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string("description")->nullable();
             $table->string("logo")->nullable();
             $table->string("cover_image")->nullable();
-            $table->string("status",["0","1","2"])->default("0");   
+            $table->string('status', 1)->default('0');   
             $table->timestamps();
         });
     }

@@ -63,6 +63,12 @@
     <!--end::Required Plugin(AdminLTE)-->
 
     @stack('styles')
+    <style>
+      .catalog-html-content img {
+        max-width: 100%;
+        height: auto;
+      }
+    </style>
   </head>
   <!--end::Head-->
   <!--begin::Body-->
@@ -765,21 +771,38 @@
           <!--begin::Container-->
           <div class="container-fluid">
             <!--begin::Row-->
-            <div class="row">
-              <div class="col-sm-6">
-                <h3 class="mb-0">@yield('page_title', 'Dashboard')</h3>
+            @hasSection('content_header')
+              <div class="row">
+                <div class="col-12">
+                  @yield('content_header')
+                </div>
               </div>
-              <div class="col-sm-6">
-                @hasSection('breadcrumb')
-                  @yield('breadcrumb')
-                @else
-                  <ol class="breadcrumb float-sm-end">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">@yield('page_title', 'Dashboard')</li>
-                  </ol>
-                @endif
+            @else
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3 class="mb-0">@yield('page_title', 'Dashboard')</h3>
+                </div>
+                <div class="col-sm-6">
+                  @hasSection('breadcrumb')
+                    <div class="float-sm-end">
+                      @yield('breadcrumb')
+                    </div>
+                  @else
+                    @php
+                      $breadcrumbCurrent = trim($__env->yieldContent('page_title')) ?: 'Dashboard';
+                    @endphp
+                    <div class="float-sm-end">
+                      <x-breadcrumb
+                        :items="[
+                            ['label' => 'Home', 'url' => route('dashboard')],
+                            ['label' => $breadcrumbCurrent],
+                        ]"
+                      />
+                    </div>
+                  @endif
+                </div>
               </div>
-            </div>
+            @endif
             <!--end::Row-->
           </div>
           <!--end::Container-->
