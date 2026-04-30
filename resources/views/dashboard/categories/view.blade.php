@@ -18,9 +18,11 @@
     <div class="p-3 d-flex align-items-center bg-body-secondary justify-content-between flex-wrap gap-2">
       <span class="text-body-secondary">Details</span>
       <div class="d-flex gap-2 justify-content-end">
-        <a href="{{ route('categories.edit', $category) }}" class="btn btn-sm btn-primary">Edit</a>
-        <a href="{{ route('categories.index') }}" class="btn btn-sm btn-outline-secondary">Back</a>
-      </div> 
+        @if (auth()->user()?->is_admin)
+          <a href="{{ route('categories.edit', $category) }}" class="btn btn-sm btn-primary">{{ __('Edit') }}</a>
+        @endif
+        <a href="{{ route('categories.index') }}" class="btn btn-sm btn-outline-secondary">{{ __('Back') }}</a>
+      </div>
     </div>
     <div class="card-body">
       <dl class="row mb-0">
@@ -30,6 +32,19 @@
         <dd class="col-sm-9">{{ $category->name }}</dd>
         <dt class="col-sm-3">Slug</dt>
         <dd class="col-sm-9">{{ $category->slug }}</dd>
+        <dt class="col-sm-3">{{ __('Image') }}</dt>
+        <dd class="col-sm-9">
+          @if ($category->image)
+            <img
+              src="{{ asset('storage/'.$category->image) }}"
+              alt=""
+              class="img-fluid rounded border"
+              style="max-height: 220px"
+            />
+          @else
+            —
+          @endif
+        </dd>
         <dt class="col-sm-3">Status</dt>
         <dd class="col-sm-9">{{ $category->status }}</dd>
         <dt class="col-sm-3">Description</dt>

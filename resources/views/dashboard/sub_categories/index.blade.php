@@ -9,7 +9,7 @@
         ['label' => 'Dashboard', 'url' => route('dashboard')],
         ['label' => 'Sub-categories'],
     ]"
-    :add-route="route('sub_categories.create')"
+    :add-route="auth()->user()?->is_admin ? route('sub_categories.create') : null"
     add-label="Add sub-category"
   />
 @endsection
@@ -27,6 +27,7 @@
       <x-data-table
         :columns="[
             ['key' => 'id', 'label' => '#'],
+            ['key' => 'image', 'label' => 'Image'],
             ['key' => 'category.name', 'label' => 'Category'],
             ['key' => 'name', 'label' => 'Name'],
             ['key' => 'slug', 'label' => 'Slug'],

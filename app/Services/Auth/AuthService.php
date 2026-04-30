@@ -191,6 +191,53 @@ final class AuthService implements AuthServiceContract
         );
     }
 
+    public function showVerificationNotice(Request $request): View
+    {
+        return view('auth.verify-email');
+    }
+
+    public function sendVerificationEmail(Request $request): RedirectResponse
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return redirect()->intended(route('dashboard'));
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('status', 'verification-link-sent');
+    }
+
+    public function verifyEmail(Request $request, $id, $hash): RedirectResponse
+    {
+        $user = User::find($id);
+
+        if (! $user || ! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+            return redirect()->route('verification.notice')->with('error', 'Invalid verification link.');
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->intended(route('dashboard'));
+        }
+
+        $user->markEmailAsVerified();
+
+        return redirect()->intended(route('dashboard'))->with('status', 'email-verified');
+    }
+
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'confirmed', 'min:8'],
+        ]);
+
+        $request->user()->update([
+            'password' => bcrypt($validated['password']),
+        ]);
+
+        return back()->with('status', 'password-updated');
+    }
+
     private function attemptLogin(Request $request, string $email, string $password, bool $remember): bool
     {
         if (! $this->guard()->attempt(

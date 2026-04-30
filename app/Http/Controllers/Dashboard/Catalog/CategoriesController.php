@@ -45,7 +45,7 @@ final class CategoriesController extends Controller
         return redirect()
             ->route('categories.index')
             ->with('success', __('Category created successfully.'));
-    }   
+    }
 
     public function show(Category $category): View
     {

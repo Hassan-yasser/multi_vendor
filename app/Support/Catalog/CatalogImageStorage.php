@@ -13,6 +13,11 @@ final class CatalogImageStorage
 
     public const SUB_SUB_CATEGORY_DIRECTORY = 'sub_sub_categories';
 
+    public const PRODUCT_DIRECTORY = 'products';
+
+    /** Store / profile uploads (brand logo, cover) */
+    public const PROFILE_DIRECTORY = 'profile';
+
     public static function store(UploadedFile $file, string $directory): string
     {
         return $file->store($directory, 'public');
@@ -26,7 +31,6 @@ final class CatalogImageStorage
 
         Storage::disk('public')->delete($relativePath);
     }
-
 
     public static function mergeStoredImage(
         array $validated,

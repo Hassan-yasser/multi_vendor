@@ -5,6 +5,7 @@ namespace App\Repositories\Catalog;
 use App\Contracts\Repositories\Catalog\SubSubCategoryRepositoryContract;
 use App\Models\SubSubCategory;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 final class SubSubCategoryRepository implements SubSubCategoryRepositoryContract
 {
@@ -43,5 +44,16 @@ final class SubSubCategoryRepository implements SubSubCategoryRepositoryContract
         }
 
         return $query->exists();
+    }
+
+    public function allForSelect(): Collection
+    {
+        return SubSubCategory::query()
+            ->with([
+                'subCategory:id,name,category_id',
+                'subCategory.category:id,name',
+            ])
+            ->orderBy('name')
+            ->get();
     }
 }

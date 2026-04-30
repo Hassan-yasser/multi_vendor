@@ -1,6 +1,10 @@
 <?php
 
 use App\Helper\ApiResponse;
+use App\Http\Middleware\EnsureCatalogWritesAreAdmin;
+use App\Http\Middleware\EnsureUserCanManageProfile;
+use App\Http\Middleware\EnsureUserBelongsToStore;
+use App\Http\Middleware\EnsureUserIsAdministrator;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -15,6 +19,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->alias([
+            'catalog.admin' => EnsureCatalogWritesAreAdmin::class,
+            'administrator' => EnsureUserIsAdministrator::class,
+            'store.staff' => EnsureUserBelongsToStore::class,
+            'profile.user' => EnsureUserCanManageProfile::class,
+        ]);
+
         $middleware->redirectGuestsTo(function (Request $request) {
             if ($request->is('api/*') || $request->wantsJson()) {
                 return null;

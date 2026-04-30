@@ -32,4 +32,12 @@ interface AuthServiceContract
     public function respondToResetPassword(ResetPasswordRequest $request): JsonResponse|RedirectResponse;
 
     public function respondToMe(Request $request): JsonResponse;
+
+    public function showVerificationNotice(Request $request): View;
+
+    public function sendVerificationEmail(Request $request): RedirectResponse;
+
+    public function verifyEmail(Request $request, $id, $hash): RedirectResponse;
+
+    public function updatePassword(Request $request): RedirectResponse;
 }

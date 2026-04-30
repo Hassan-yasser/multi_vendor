@@ -18,8 +18,10 @@
     <div class="p-3 d-flex align-items-center bg-body-secondary justify-content-between flex-wrap gap-2">
       <span class="text-body-secondary">Details</span>
       <div class="d-flex gap-2 justify-content-end">
-        <a href="{{ route('sub_sub_categories.edit', $subSubCategory) }}" class="btn btn-sm btn-primary">Edit</a>
-        <a href="{{ route('sub_sub_categories.index') }}" class="btn btn-sm btn-outline-secondary">Back</a>
+        @if (auth()->user()?->is_admin)
+          <a href="{{ route('sub_sub_categories.edit', $subSubCategory) }}" class="btn btn-sm btn-primary">{{ __('Edit') }}</a>
+        @endif
+        <a href="{{ route('sub_sub_categories.index') }}" class="btn btn-sm btn-outline-secondary">{{ __('Back') }}</a>
       </div>
     </div>
     <div class="card-body">
@@ -32,6 +34,19 @@
         <dd class="col-sm-9">{{ $subSubCategory->name }}</dd>
         <dt class="col-sm-3">Slug</dt>
         <dd class="col-sm-9">{{ $subSubCategory->slug }}</dd>
+        <dt class="col-sm-3">{{ __('Image') }}</dt>
+        <dd class="col-sm-9">
+          @if ($subSubCategory->image)
+            <img
+              src="{{ asset('storage/'.$subSubCategory->image) }}"
+              alt=""
+              class="img-fluid rounded border"
+              style="max-height: 220px"
+            />
+          @else
+            —
+          @endif
+        </dd>
         <dt class="col-sm-3">Status</dt>
         <dd class="col-sm-9">{{ $subSubCategory->status }}</dd>
         <dt class="col-sm-3">Description</dt>

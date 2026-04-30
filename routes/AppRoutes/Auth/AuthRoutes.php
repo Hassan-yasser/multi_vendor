@@ -21,3 +21,22 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword'])
     ->name('password.store');
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+
+// Password Update
+Route::put('/password', [AuthController::class, 'updatePassword'])
+    ->middleware('auth')
+    ->name('password.update');
+
+// Email Verification
+Route::middleware('auth')->group(function () {
+    Route::get('/email/verify', [AuthController::class, 'showVerificationNotice'])
+        ->name('verification.notice');
+
+    Route::post('/email/verification-notification', [AuthController::class, 'sendVerificationEmail'])
+        ->middleware('throttle:6,1')
+        ->name('verification.send');
+
+    Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
+        ->middleware('signed')
+        ->name('verification.verify');
+});

@@ -67,4 +67,24 @@ class AuthController extends Controller
     {
         return $this->auth->respondToMe($request);
     }
+
+    public function showVerificationNotice(Request $request): View
+    {
+        return $this->auth->showVerificationNotice($request);
+    }
+
+    public function sendVerificationEmail(Request $request): RedirectResponse
+    {
+        return $this->auth->sendVerificationEmail($request);
+    }
+
+    public function verifyEmail(Request $request, $id, $hash): RedirectResponse
+    {
+        return $this->auth->verifyEmail($request, $id, $hash);
+    }
+
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        return $this->auth->updatePassword($request);
+    }
 }

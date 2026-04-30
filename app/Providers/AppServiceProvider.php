@@ -6,14 +6,22 @@ use App\Contracts\Auth\AuthServiceContract;
 use App\Contracts\Repositories\Catalog\CategoryRepositoryContract;
 use App\Contracts\Repositories\Catalog\SubCategoryRepositoryContract;
 use App\Contracts\Repositories\Catalog\SubSubCategoryRepositoryContract;
+use App\Contracts\Repositories\DiscountRepositoryContract;
+use App\Contracts\Repositories\InventoryRepositoryContract;
+use App\Contracts\Repositories\ProductRepositoryContract;
 use App\Contracts\Repositories\UserRepositoryContract;
 use App\Repositories\Catalog\CategoryRepository;
 use App\Repositories\Catalog\SubCategoryRepository;
 use App\Repositories\Catalog\SubSubCategoryRepository;
+use App\Repositories\DiscountRepository;
+use App\Repositories\InventoryRepository;
+use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
 use App\Services\Auth\AuthService;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,6 +37,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(CategoryRepositoryContract::class, CategoryRepository::class);
         $this->app->singleton(SubCategoryRepositoryContract::class, SubCategoryRepository::class);
         $this->app->singleton(SubSubCategoryRepositoryContract::class, SubSubCategoryRepository::class);
+
+        $this->app->singleton(ProductRepositoryContract::class, ProductRepository::class);
+        $this->app->singleton(DiscountRepositoryContract::class, DiscountRepository::class);
+        $this->app->singleton(InventoryRepositoryContract::class, InventoryRepository::class);
     }
 
     /**
@@ -37,6 +49,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
+
+        View::composer('layout.dashboard', function (): void {
+            /** @var \App\Models\User|null $user */
+            $user = Auth::user();
+            if ($user !== null && $user->store_id !== null) {
+                $user->loadMissing('store');
+            }
+        });
 
         $limit = ini_get('upload_max_filesize');
 

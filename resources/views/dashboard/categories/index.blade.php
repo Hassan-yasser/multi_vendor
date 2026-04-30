@@ -9,7 +9,7 @@
         ['label' => 'Dashboard', 'url' => route('dashboard')],
         ['label' => 'Categories'],
     ]"
-    :add-route="route('categories.create')"
+    :add-route="auth()->user()?->is_admin ? route('categories.create') : null"
     add-label="Add category"
   />
 @endsection
